@@ -12,3 +12,9 @@ div{
 button{
     margin:10px;
 }
+
+.footer {
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+}
