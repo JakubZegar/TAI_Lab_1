@@ -18,3 +18,13 @@ button{
    flex-direction: row;
    justify-content: center;
 }
+
+.navbar{
+
+}
+
+.nav-item{
+    display:inline;
+    float:left;
+
+}
