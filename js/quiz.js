@@ -26,8 +26,6 @@ fetch('https://quiztai.herokuapp.com/api/quiz')
 .then(resp => resp.json())
 .then(resp => {
        preQuestions = resp;
-       console.log(preQuestions[0])
-
 
        questionBarElem = document.querySelector(".questionBar");
 
@@ -35,11 +33,9 @@ fetch('https://quiztai.herokuapp.com/api/quiz')
             questionBar += '<div class="circle" id=' + i + '></div>';
        }
        
-       questionBarElem.innerHTML = questionBar;
+        questionBarElem.innerHTML = questionBar;
             
         questionCircles = document.querySelectorAll('.circle');
-
-        console.log(questionCircles)
 
         for( let i = 0; i < questionCircles.length; ++i ){
             questionCircles[i].addEventListener('click', function (event) {
@@ -55,8 +51,6 @@ fetch('https://quiztai.herokuapp.com/api/quiz')
         setQuestion(0);
 });
 
-
-
 function clearAnswers() {
      for(let i = 0; i <  20 ; ++i){
         answeredQuestion[i] = { "answerID":null,
@@ -69,7 +63,6 @@ function clearCirlcles() {
         questionCircles[i].style.backgroundColor="white";
     }
 }
-
 
 function setQuestion(index) {
     
@@ -91,8 +84,6 @@ function setQuestion(index) {
     }
 }
 
-
-
 next.addEventListener('click', function (event) {
     if(index < 19){
         questionCircles[index].style.transform = "initial";
@@ -101,7 +92,6 @@ next.addEventListener('click', function (event) {
         nextQuestion();
     } 
 });
-
 
 previous.addEventListener('click', function (event) {
     if( index > 0) {
@@ -130,6 +120,7 @@ function doAction(event) {
 
     if( checkIfAnyQuestionsLeft() ) {
         results.style.display="inline"
+        showResults(points);
     }
 }
 
@@ -142,7 +133,6 @@ function nextQuestion(){
         if(answeredQuestion[index].correct == null || firstQuestion ){
             answers[i].addEventListener('click', doAction);
         }
-        
     }
 
     if( answeredQuestion[index].correct == true){
@@ -150,7 +140,6 @@ function nextQuestion(){
     } else if ( answeredQuestion[index].correct == false ) {
         answers[answeredQuestion[index].answerId].style.backgroundColor="red";
     }
-
 
     if( firstQuestion ) {
         firstQuestion = false;
@@ -165,21 +154,17 @@ function checkIfAnyQuestionsLeft() {
         }
     }
     return true;
-
 }
-
 
 function paintAnswer(clickedAnswer,color){
     clickedAnswer.style.backgroundColor=color;
 }
 
 function disableAnswers(){
-    
     for (let i = 0; i < answers.length; i++) {
         answers[i].removeEventListener('click', doAction);
     }   
 }
-
 
 restart.addEventListener('click', function (event) {
     event.preventDefault();
@@ -196,3 +181,35 @@ restart.addEventListener('click', function (event) {
     //list.style.display = 'block';
     results.style.display = 'none';
 });
+
+function showResults(points) {
+
+    if(JSON.parse(localStorage.getItem("avg") == null)){
+        let firstResult = {
+            "totalQuizFinished":0,
+            "averageResult":0
+        }
+        localStorage.setItem("avg", JSON.stringify(firstResult));
+    }
+
+    let quizResult = JSON.parse(localStorage.getItem("avg"));
+
+    nextAvg = (((quizResult.totalQuizFinished * quizResult.averageResult) + points)/(quizResult.totalQuizFinished+1));
+
+    let quizResultUpdate = {
+        "totalQuizFinished":quizResult.totalQuizFinished + 1,
+        "averageResult": nextAvg
+    }
+
+
+    localStorage.setItem("avg", JSON.stringify(quizResultUpdate));
+
+    let tableResult =   '<th scope="row">Your score</th>'+
+                        '<td class="userScorePoint">'+ points +'</td>'+
+                        '<td class="average">'+ nextAvg +'</td>'
+
+    let tableElement = document.querySelector(".resultTable");
+    tableElement.innerHTML = tableResult;
+
+    console.log(quizResultUpdate.totalQuizFinished)
+}
