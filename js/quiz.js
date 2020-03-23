@@ -91,7 +91,7 @@ function setQuestion(index) {
     }
 }
 
-next.addEventListener('click', function (event) {
+next.addEventListener('click', function () {
     if(index < 19){
         questionCircles[index].style.transform = "initial";
         index++;
@@ -114,7 +114,7 @@ function doAction(event) {
         points++;
         pointsElem.innerText = points;
         paintAnswer(event.target,"green");
-        questionCircles[index].style.backgroundColor="lightgreen";
+        questionCircles[index].style.backgroundColor="green";
         answeredQuestion[index].correct=true;
 
     } else {
@@ -149,7 +149,6 @@ function nextQuestion(){
         if(answeredQuestion[index].answerId != null){
             answers[answeredQuestion[index].answerId].style.backgroundColor="red";
         }
-
     }
 
     if( firstQuestion ) {
@@ -158,7 +157,6 @@ function nextQuestion(){
 }
 
 function checkIfAnyQuestionsLeft() {
-
     for (answer of answeredQuestion) {
         if( answer.answerId == null){
             return false;
@@ -182,17 +180,20 @@ restart.addEventListener('click', function (event) {
     questionCircles[index].style.transform = "initial";
     index = 0;
     points = 0;
+
     time = 60;
     timerBackground.style.backgroundSize="94.5%";
-    timerBackground.style.backgroundColor="green"
+    timerBackground.style.backgroundColor="lightgreen"
 
     firstQuestion = true;
     clearAnswers();
     clearCirlcles();
+
     let userScorePoint = document.querySelector('.score');
     userScorePoint.innerHTML = points;
     nextQuestion();
     setQuestion(index);
+
     pauseTimer = false;
     timer(time)
     results.style.display = 'none';
@@ -200,7 +201,7 @@ restart.addEventListener('click', function (event) {
 
 function showResults(points) {
 
-    if(JSON.parse(localStorage.getItem("avg") == null)){
+    if( localStorage.getItem("avg") == null ){
         let firstResult = {
             "totalQuizFinished":0,
             "averageResult":0
@@ -217,7 +218,6 @@ function showResults(points) {
         "averageResult": nextAvg
     }
 
-
     localStorage.setItem("avg", JSON.stringify(quizResultUpdate));
 
     let tableResult =   '<th scope="row">Your score</th>'+
@@ -226,8 +226,6 @@ function showResults(points) {
 
     let tableElement = document.querySelector(".resultTable");
     tableElement.innerHTML = tableResult;
-
-    console.log(quizResultUpdate.totalQuizFinished)
 }
 
 function timer(time) {

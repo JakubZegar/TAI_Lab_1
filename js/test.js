@@ -5,6 +5,4 @@ for(let i = 1; i<11; ++i){
         line += i*j + " ";
     }
     console.log(line)
-
 }
-
