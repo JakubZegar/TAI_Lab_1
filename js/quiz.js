@@ -171,107 +171,12 @@ let preQuestions =
             ]
         }];
 
-let answeredQuestion= [
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-    
-    {
-        "answerId":null,
-        "correct":null,
-    },
-]
+let answeredQuestion= []
+
+for(let i =0; i< preQuestions.length; ++i){
+    answeredQuestion[i] = { "answerID":null,
+                            "correct":null}
+}
 
 let next = document.querySelector('.next');
 let previous = document.querySelector('.previous');
