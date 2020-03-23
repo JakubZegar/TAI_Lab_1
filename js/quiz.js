@@ -172,11 +172,15 @@ let preQuestions =
         }];
 
 let answeredQuestion= []
+clearAnswers();
 
-for(let i =0; i< preQuestions.length; ++i){
-    answeredQuestion[i] = { "answerID":null,
-                            "correct":null}
+function clearAnswers() {
+    for(let i =0; i< preQuestions.length; ++i){
+        answeredQuestion[i] = { "answerID":null,
+                                "correct":null}
+    }
 }
+
 
 let next = document.querySelector('.next');
 let previous = document.querySelector('.previous');
