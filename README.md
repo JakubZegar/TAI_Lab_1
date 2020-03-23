@@ -1,1 +1,1 @@
-# TAI Laboratorium 1
+# TAI Jakub Zegar
