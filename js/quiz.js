@@ -18,15 +18,18 @@ let restart = document.querySelector('.restart');
 let index = 0;
 let points = 0;
 
+let displayTime = document.querySelector(".timeLeft");
+let timerBackground = document.querySelector(".timer");
+let pauseTimer = false;
+
 let firstQuestion = true;
 let questionBarElem;
-
+let time;
 
 fetch('https://quiztai.herokuapp.com/api/quiz')
 .then(resp => resp.json())
 .then(resp => {
        preQuestions = resp;
-
        questionBarElem = document.querySelector(".questionBar");
 
        for(i = 0; i < preQuestions.length; ++i){
@@ -49,6 +52,10 @@ fetch('https://quiztai.herokuapp.com/api/quiz')
         clearAnswers();
         nextQuestion();
         setQuestion(0);
+
+        time = 60;
+
+        timer(time);
 });
 
 function clearAnswers() {
@@ -107,7 +114,7 @@ function doAction(event) {
         points++;
         pointsElem.innerText = points;
         paintAnswer(event.target,"green");
-        questionCircles[index].style.backgroundColor="green";
+        questionCircles[index].style.backgroundColor="lightgreen";
         answeredQuestion[index].correct=true;
 
     } else {
@@ -121,6 +128,7 @@ function doAction(event) {
     if( checkIfAnyQuestionsLeft() ) {
         results.style.display="inline"
         showResults(points);
+        pauseTimer = true;
     }
 }
 
@@ -138,7 +146,10 @@ function nextQuestion(){
     if( answeredQuestion[index].correct == true){
         answers[answeredQuestion[index].answerId].style.backgroundColor="green";
     } else if ( answeredQuestion[index].correct == false ) {
-        answers[answeredQuestion[index].answerId].style.backgroundColor="red";
+        if(answeredQuestion[index].answerId != null){
+            answers[answeredQuestion[index].answerId].style.backgroundColor="red";
+        }
+
     }
 
     if( firstQuestion ) {
@@ -171,6 +182,10 @@ restart.addEventListener('click', function (event) {
     questionCircles[index].style.transform = "initial";
     index = 0;
     points = 0;
+    time = 60;
+    timerBackground.style.backgroundSize="94.5%";
+    timerBackground.style.backgroundColor="green"
+
     firstQuestion = true;
     clearAnswers();
     clearCirlcles();
@@ -178,7 +193,8 @@ restart.addEventListener('click', function (event) {
     userScorePoint.innerHTML = points;
     nextQuestion();
     setQuestion(index);
-    //list.style.display = 'block';
+    pauseTimer = false;
+    timer(time)
     results.style.display = 'none';
 });
 
@@ -212,4 +228,43 @@ function showResults(points) {
     tableElement.innerHTML = tableResult;
 
     console.log(quizResultUpdate.totalQuizFinished)
+}
+
+function timer(time) {
+    function tick() {
+        
+        displayTime.innerHTML = time;
+
+        if(time == 30 ){
+            timerBackground.style.backgroundColor="yellow"
+        } else if (time == 10){
+            timerBackground.style.backgroundColor="red"
+        }
+
+        if( time > 0 ) {
+
+            if(pauseTimer){
+                return;
+            }
+
+            time--;
+            setTimeout(tick, 1000);
+            timerBackground.style.width = 3 + time * 1.5 + "%";
+            
+        } else  {
+                pauseTimer = true;
+                for(let i = 0; i < answeredQuestion.length; ++i){
+                    if( answeredQuestion[i].answerId == null){
+                        answeredQuestion[i].correct = false;
+                        questionCircles[i].style.backgroundColor="yellow";
+                    }
+                }
+                results.style.display="inline"
+                showResults(points)
+            }
+        }
+    
+    if( !pauseTimer ){
+        tick();
+    }
 }
